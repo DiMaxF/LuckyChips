@@ -32,10 +32,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var optionsScreen: FrameLayout
     private lateinit var infoScreen: FrameLayout
 
+    private lateinit var screens: List<FrameLayout>
+
     private lateinit var toggleSounds: ToggleButton
     private lateinit var toggleMusic: ToggleButton
     private lateinit var toggleVibration: ToggleButton
-    private lateinit var toggleQuietMode: ToggleButton
 
     private lateinit var chip1: View
     private lateinit var chip2: View
@@ -48,18 +49,52 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navigation: FrameLayout
 
-    lateinit var fadeIn: Animation
-    lateinit var fadeOut: Animation
-    lateinit var fromLeft: Animation
-    lateinit var fromRight: Animation
+    private lateinit var fadeIn: Animation
+    private lateinit var fadeOut: Animation
+    private lateinit var fromLeft: Animation
+    private lateinit var fromRight: Animation
 
+    private val dragListener = View.OnDragListener{ view, event ->
+        when(event.action) {
+            DragEvent.ACTION_DRAG_STARTED ->{
+                event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN )
+                vibrate(300)
+                true
+            }
+            DragEvent.ACTION_DRAG_ENTERED ->{
+                view.invalidate()
+                true
+            }
+            DragEvent.ACTION_DRAG_LOCATION -> true
+            DragEvent.ACTION_DRAG_EXITED ->{
+                view.invalidate()
+                true
+            }
+            DragEvent.ACTION_DROP ->{
+                val item = event.clipData.getItemAt(0)
+                val dragData = item.text
+                val v = event.localState as View
+                val owner =  v.parent as ViewGroup
+                owner.removeView(v)
+                val destination = view as FrameLayout
+                destination.addView(v)
+                v.visibility = View.VISIBLE
+                resultGame()
+                true
+            }
+            DragEvent.ACTION_DRAG_ENDED ->{
+                view.invalidate()
+                true
+            }else -> false
+        }
+    }
 
     companion object {
         lateinit var appContext: Context
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("MissingInflatedId")
+    //region Override Functions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -74,10 +109,11 @@ class MainActivity : AppCompatActivity() {
         optionsScreen = findViewById(R.id.options)
         infoScreen = findViewById(R.id.info)
 
+        screens = listOf(menuScreen, gameScreen, optionsScreen, infoScreen)
+
         toggleSounds = findViewById(R.id.toggle_sounds)
         toggleMusic = findViewById(R.id.toggle_music)
         toggleVibration = findViewById(R.id.toggle_vibration)
-        //toggleQuietMode = findViewById(R.id.toggle_quiet_mode)
 
         winPanel = findViewById(R.id.win_panel)
         losePanel = findViewById(R.id.lose_panel)
@@ -99,64 +135,21 @@ class MainActivity : AppCompatActivity() {
         toggleVibration.setOnCheckedChangeListener { _, isChecked  ->
             onToggleVibration(isChecked, toggleVibration);
         }
-        /*toggleQuietMode.setOnCheckedChangeListener { _, isChecked  ->
-            onToggleQuietMode(isChecked);
-        }*/
 
         appContext = applicationContext
         switchScreen(menuScreen)
 
         setToolbarTitle("Hello!")
-
     }
 
-    val dragListener = View.OnDragListener{view, event ->
-            when(event.action) {
-                DragEvent.ACTION_DRAG_STARTED ->{
-                    event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN )
-                    vibrate(300)
-                    true
-                }
-                DragEvent.ACTION_DRAG_ENTERED ->{
-                    view.invalidate()
-                    true
-                }
-                DragEvent.ACTION_DRAG_LOCATION -> true
-                DragEvent.ACTION_DRAG_EXITED ->{
-                    view.invalidate()
-                    true
-                }
-                DragEvent.ACTION_DROP ->{
-                    val item = event.clipData.getItemAt(0)
-                    val dragData = item.text
-                    val v = event.localState as View
-                    val owner =  v.parent as ViewGroup
-                    owner.removeView(v)
-                    val destination = view as FrameLayout
-                    destination.addView(v)
-                    v.visibility = View.VISIBLE
-                    resultGame()
-                    true
-                }
-                DragEvent.ACTION_DRAG_ENDED ->{
-                    view.invalidate()
-                    true
-                }else -> false
-            }
-    }
+    //endregion
 
+    //region Navigation
 
     fun onButtonMenu(view: View) {
         switchScreen(menuScreen)
         toolbarShow(true)
         setToolbarTitle("Menu")
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun onButtonGame(view: View) {
-        switchScreen(gameScreen)
-        toolbarShow(false)
-        startNewGame()
     }
 
     fun onButtonOptions(view: View) {
@@ -172,24 +165,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchScreen(show: FrameLayout){
-        val mScreen = menuScreen.id == show.id
-        val gScreen = gameScreen.id == show.id
-        val oScreen = optionsScreen.id == show.id
-        val iScreen = infoScreen.id == show.id
-        visibility(mScreen, menuScreen)
-        visibility(gScreen, gameScreen)
-        visibility(oScreen, optionsScreen)
-        visibility(iScreen, infoScreen)
 
-        menuScreen.clearAnimation()
-        gameScreen.clearAnimation()
-        optionsScreen.clearAnimation()
-        infoScreen.clearAnimation()
-
-        if(mScreen) menuScreen.startAnimation(fadeIn)
-        if(gScreen) gameScreen.startAnimation(fadeIn)
-        if(oScreen) optionsScreen.startAnimation(fadeIn)
-        if(iScreen) infoScreen.startAnimation(fadeIn)
+        for(screen in screens){
+            visibility(screen.id == show.id, screen)
+            screen.clearAnimation()
+            if(screen.id == show.id) screen.startAnimation(fadeIn)
+        }
 
         playAudio(R.raw.click)
     }
@@ -198,38 +179,10 @@ class MainActivity : AppCompatActivity() {
         view.visibility = if(value){ View.VISIBLE} else{View.INVISIBLE}
     }
 
-    fun isVisible(view: FrameLayout): Boolean {
-        return view.visibility == View.VISIBLE
-    }
+    //endregion
 
-    fun setToolbarTitle(title: String){
-        val actionbar: androidx.appcompat.app.ActionBar? = supportActionBar
-        val textview = TextView(this@MainActivity)
-        val layoutparams = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
-        )
+    //region Settings
 
-        textview.layoutParams = layoutparams
-        textview.text = title
-        textview.setTextColor(Color.WHITE)
-        textview.textSize = 22f
-        textview.setTypeface(null, Typeface.BOLD);
-
-        actionbar?.displayOptions = androidx.appcompat.app.ActionBar.DISPLAY_SHOW_CUSTOM
-        actionbar?.customView = textview
-    }
-
-    private fun toolbarShow(value: Boolean){
-        val actionbar: androidx.appcompat.app.ActionBar? = supportActionBar
-        if(value) {
-            actionbar?.show()
-        } else{
-            actionbar?.hide()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun onToggleSounds(value: Boolean, view: ToggleButton){
         Variables.sounds = value
         playAudio(R.raw.switch_toggle)
@@ -237,7 +190,6 @@ class MainActivity : AppCompatActivity() {
         colorTransition(view, colorTarget)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun onToggleMusic(value: Boolean, view: ToggleButton){
         Variables.music = value
         if(!value) offAudio()
@@ -246,7 +198,6 @@ class MainActivity : AppCompatActivity() {
         colorTransition(view, colorTarget)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun onToggleVibration(value: Boolean, view: ToggleButton){
         Variables.vibration = value
         playAudio(R.raw.switch_toggle)
@@ -254,9 +205,9 @@ class MainActivity : AppCompatActivity() {
         colorTransition(view, colorTarget)
     }
 
-    private fun onToggleQuietMode(value: Boolean){
-        Variables.quiet_mode = value
-    }
+    //endregion
+
+    //region Audio
 
     enum class AudioType{
         Sounds,
@@ -300,8 +251,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun startNewGame(){
+    //endregion
+
+    //region Game
+
+    fun onButtonGame(view: View) {
+        switchScreen(gameScreen)
+        toolbarShow(false)
+        startNewGame()
+    }
+
+    private fun startNewGame(){
         visibility(false, winPanel)
         visibility(false, losePanel)
 
@@ -335,20 +295,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("ObjectAnimatorBinding")
-    fun colorTransition(view: ToggleButton, targetColor: Int){
-        val startColor = view.solidColor
-        val colors = arrayOf(ColorDrawable(startColor), ColorDrawable(targetColor))
-        val trans = TransitionDrawable(colors)
-        view.setBackgroundDrawable(trans)
-        trans.startTransition(500)
-        /*val animator = ObjectAnimator.ofArgb(this, "background", startColor, targetColor)
-        animator.duration = 500
-        animator.interpolator = LinearInterpolator()
-        animator.start()*/
-    }
-
-    fun resultGame(){
+    private fun resultGame(){
         chip1.setOnLongClickListener(null)
         chip2.setOnLongClickListener(null)
         win.setOnDragListener(null)
@@ -363,14 +310,14 @@ class MainActivity : AppCompatActivity() {
         }, 1000)
     }
 
-    fun win(){
+    private fun win(){
         visibility(true, winPanel)
         winPanel.startAnimation(fadeIn)
         winPanel.startAnimation(fromLeft)
         playAudio(R.raw.win)
     }
 
-    fun lose(){
+    private fun lose(){
         visibility(true, losePanel)
         losePanel.startAnimation(fadeIn)
         losePanel.startAnimation(fromRight)
@@ -384,4 +331,45 @@ class MainActivity : AppCompatActivity() {
         overridePendingTransition( 0, 0);
     }
 
+    //endregion
+
+    //region Utils
+
+    @SuppressLint("ObjectAnimatorBinding")
+    fun colorTransition(view: View, targetColor: Int){
+        val startColor = view.solidColor
+        val colors = arrayOf(ColorDrawable(startColor), ColorDrawable(targetColor))
+        val trans = TransitionDrawable(colors)
+        view.setBackgroundDrawable(trans)
+        trans.startTransition(500)
+    }
+
+    private fun setToolbarTitle(title: String){
+        val actionbar: androidx.appcompat.app.ActionBar? = supportActionBar
+        val textview = TextView(this@MainActivity)
+        val layoutparams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        textview.layoutParams = layoutparams
+        textview.text = title
+        textview.setTextColor(Color.WHITE)
+        textview.textSize = 22f
+        textview.setTypeface(null, Typeface.BOLD);
+
+        actionbar?.displayOptions = androidx.appcompat.app.ActionBar.DISPLAY_SHOW_CUSTOM
+        actionbar?.customView = textview
+    }
+
+    private fun toolbarShow(value: Boolean){
+        val actionbar: androidx.appcompat.app.ActionBar? = supportActionBar
+        if(value) {
+            actionbar?.show()
+        } else{
+            actionbar?.hide()
+        }
+    }
+
+    //endregion
 }

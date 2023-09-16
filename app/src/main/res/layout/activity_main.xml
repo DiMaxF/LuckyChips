@@ -7,6 +7,7 @@
     tools:context=".MainActivity"
     android:background="#333">
 
+    <!-- MENU SCREEN !-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,6 +36,7 @@
 
     </FrameLayout>
 
+    <!-- GAME SCREEN !-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -59,6 +61,7 @@
             android:layout_gravity="center_horizontal
 "/>
 
+        <!-- GAME BOARD !-->
         <FrameLayout
             android:layout_width="400dp"
             android:layout_height="300dp"
@@ -70,61 +73,63 @@
             android:layout_marginBottom="50dp">
 
             <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <View
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:background="@drawable/pokerchip2"
-            android:focusable="true"
-            android:clickable="true"
-            android:id="@+id/chip1">
-        </View>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    </FrameLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <View
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/pokerchip3"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:id="@+id/chip2"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <View
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/pokerchip2"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:id="@+id/chip1">
+                    </View>
 
-    </FrameLayout>
-</LinearLayout>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <View
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/pokerchip3"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/chip2"/>
+
+                </FrameLayout>
+            </LinearLayout>
 
         </FrameLayout>
 
+        <!-- WIN ZONE !-->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/asdasdas"
+            android:id="@+id/win"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="50dp"
+            android:clickable="true"
+            android:focusable="true">
 
-<FrameLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/asdasdas"
-    android:id="@+id/win"
-    android:layout_gravity="center_horizontal|bottom"
-    android:layout_marginBottom="50dp"
-    android:clickable="true">
+        </FrameLayout>
 
-</FrameLayout>
-
-
+        <!-- WIN PANEL !-->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/win_panel"
-            android:background="#000000"
-            >
+            android:background="#000000">
+
             <ImageView
                 android:layout_width="700dp"
                 android:layout_height="match_parent"
@@ -168,6 +173,7 @@
                 android:textStyle="bold"/>
         </FrameLayout>
 
+        <!-- LOSE PANEL !-->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -217,10 +223,9 @@
                 android:textStyle="bold"/>
         </FrameLayout>
 
-
-
     </FrameLayout>
 
+    <!-- OPTIONS SCREEN !-->
     <FrameLayout
         android:id="@+id/options"
         android:layout_width="match_parent"
@@ -387,6 +392,7 @@
         </LinearLayout>
     </FrameLayout>
 
+    <!-- INFO SCREEN !-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -411,6 +417,7 @@
             android:paddingRight="20dp"/>
     </FrameLayout>
 
+    <!-- NAVIGATION !-->
     <FrameLayout
         android:layout_height="100dp"
         android:layout_width="match_parent"
@@ -424,37 +431,56 @@
             android:orientation="horizontal"
             android:gravity="center">
 
-            <ImageButton
-                android:layout_width="100dp"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_info"
-                android:onClick="onButtonInfo"
-                android:background="#00000000"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                tools:ignore="UsingOnClickInXml"
-                android:layout_marginRight="55dp"/>
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_info"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="onButtonInfo"
+                    tools:ignore="UsingOnClickInXml"
+                    android:background="@color/clear"/>
+            </FrameLayout>
 
-            <ImageButton
-                android:layout_width="55dp"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_play"
-                android:onClick="onButtonMenu"
-                android:background="#00000000"
-                android:scaleX="2.5"
-                android:scaleY="2.5"
-                tools:ignore="UsingOnClickInXml"/>
+                android:layout_weight="1">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="onButtonMenu"
+                    tools:ignore="UsingOnClickInXml"
+                    android:background="@color/clear"/>
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_play"/>
+            </FrameLayout>
 
-            <ImageButton
-                android:layout_width="100dp"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_options"
-                android:onClick="onButtonOptions"
-                android:background="#00000000"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                tools:ignore="UsingOnClickInXml"
-                android:layout_marginLeft="55dp"/>
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_options"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="onButtonOptions"
+                    tools:ignore="UsingOnClickInXml"
+                    android:background="@color/clear"/>
+            </FrameLayout>
 
         </LinearLayout>
 
