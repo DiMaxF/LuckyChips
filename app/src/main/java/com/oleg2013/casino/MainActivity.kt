@@ -1,16 +1,16 @@
 package com.oleg2013.casino
 
-import android.R.color
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.*
 import android.util.Log
 import android.view.DragEvent
@@ -18,9 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.LinearInterpolator
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
 
@@ -238,6 +236,26 @@ class MainActivity : AppCompatActivity() {
         playAudio(R.raw.switch_toggle)
         val colorTarget = if(value) getColor(R.color.purple_500) else getColor(R.color.teal_700)
         colorTransition(view, colorTarget)
+    }
+
+    fun onButtonRate(view: View){
+        try{
+            val rateIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appContext.packageName))
+            startActivity(rateIntent)
+        }catch (e: Exception){
+            Log.e("LuckyChips", "Don't find the app in store")
+            Toast.makeText(appContext, "Don't find the app in store", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    fun onButtonShare(view: View){
+        val intent= Intent()
+        intent.action=Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_description))
+        intent.type="text/plain"
+        startActivity(Intent.createChooser(intent,"Share To:"))
     }
 
     //endregion

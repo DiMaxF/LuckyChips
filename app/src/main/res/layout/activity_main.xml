@@ -73,9 +73,9 @@
             android:layout_marginBottom="50dp">
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
-               android:textStyle="bold"
+                android:textStyle="bold"
                 android:textColor="#fff"
                 android:layout_marginTop="80dp"
                 android:layout_gravity="center_horizontal"
@@ -238,44 +238,8 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <!--LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="40dp"
-                        android:text="Quiet mode"
-                        android:textColor="#fff"
-                        android:textSize="20sp" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <ToggleButton
-                        android:id="@+id/toggle_quiet_mode"
-                        android:layout_width="54dp"
-                        android:layout_height="42dp"
-                        android:layout_gravity="center"
-                        android:background="#00CB8E"
-                        android:textColor="#fff"
-                        android:checked="false"
-                        android:textSize="20sp" />
-                </FrameLayout>
-            </LinearLayout!-->
-
+            <!-- TOGGLE SOUNDS !-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -287,11 +251,18 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_sounds"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center_vertical"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="80dp"
                         android:text="Sounds"
                         android:textColor="#fff"
                         android:textSize="20sp" />
@@ -306,7 +277,8 @@
                         android:id="@+id/toggle_sounds"
                         android:layout_width="54dp"
                         android:layout_height="42dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="40dp"
                         android:background="#00CB8E"
                         android:textColor="#fff"
                         android:checked="true"
@@ -314,6 +286,7 @@
                 </FrameLayout>
             </LinearLayout>
 
+            <!-- TOGGLE MUSIC !-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -325,11 +298,18 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_music"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center_vertical"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="80dp"
                         android:text="Music"
                         android:textColor="#fff"
                         android:textSize="20sp" />
@@ -344,7 +324,8 @@
                         android:id="@+id/toggle_music"
                         android:layout_width="54dp"
                         android:layout_height="42dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="40dp"
                         android:background="#00CB8E"
                         android:textColor="#fff"
                         android:checked="true"
@@ -352,6 +333,7 @@
                 </FrameLayout>
             </LinearLayout>
 
+            <!-- TOGGLE VIBRATION !-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -363,11 +345,18 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_vibration"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center_vertical"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="80dp"
                         android:text="Vibration"
                         android:textColor="#fff"
                         android:textSize="20sp" />
@@ -382,13 +371,103 @@
                         android:id="@+id/toggle_vibration"
                         android:layout_width="54dp"
                         android:layout_height="42dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="40dp"
                         android:background="#00CB8E"
                         android:textColor="#fff"
                         android:checked="true"
                         android:textSize="20sp" />
                 </FrameLayout>
             </LinearLayout>
+
+            <!-- SHARE !-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_share"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="80dp"
+                        android:text="Share app"
+                        android:textColor="#fff"
+                        android:textSize="20sp" />
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="100dp"
+                        android:layout_height="42dp"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="40dp"
+                        android:background="@color/teal_200"
+                        android:textColor="#fff"
+                        android:checked="true"
+                        android:text="share"
+                        android:onClick="onButtonShare"
+                        android:textSize="16sp"/>
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- RATE !-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/ic_rate"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="80dp"
+                        android:text="Rate app"
+                        android:textColor="#fff"
+                        android:textSize="20sp" />
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="100dp"
+                        android:layout_height="42dp"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="40dp"
+                        android:background="@color/teal_200"
+                        android:textColor="#fff"
+                        android:checked="true"
+                        android:text="rate"
+                        android:onClick="onButtonRate"
+                        android:textSize="16sp"/>
+                </FrameLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </FrameLayout>
 
