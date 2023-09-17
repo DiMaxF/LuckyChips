@@ -32,6 +32,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var optionsScreen: FrameLayout
     private lateinit var infoScreen: FrameLayout
 
+    private lateinit var iconInfo: ImageView
+    private lateinit var iconMenu: ImageView
+    private lateinit var iconOptions: ImageView
+
+    private lateinit var buttonInfo: Button
+    private lateinit var buttonMenu: Button
+    private lateinit var buttonOptions: Button
+
+    private lateinit var navigationButtons: List<Button>
+
     private lateinit var screens: List<FrameLayout>
 
     private lateinit var toggleSounds: ToggleButton
@@ -53,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fadeOut: Animation
     private lateinit var fromLeft: Animation
     private lateinit var fromRight: Animation
+    private lateinit var click: Animation
 
     private val dragListener = View.OnDragListener{ view, event ->
         when(event.action) {
@@ -95,6 +106,7 @@ class MainActivity : AppCompatActivity() {
 
     //region Override Functions
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -103,13 +115,23 @@ class MainActivity : AppCompatActivity() {
         fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
         fromLeft = AnimationUtils.loadAnimation(this, R.anim.from_left)
         fromRight = AnimationUtils.loadAnimation(this, R.anim.from_right)
+        click = AnimationUtils.loadAnimation(this, R.anim.click)
 
         menuScreen = findViewById(R.id.menu)
         gameScreen = findViewById(R.id.game)
         optionsScreen = findViewById(R.id.options)
         infoScreen = findViewById(R.id.info)
 
+        iconInfo = findViewById(R.id.navigation_info)
+        iconOptions = findViewById(R.id.navigation_settings)
+        iconMenu = findViewById(R.id.navigation_menu)
+
+        buttonInfo = findViewById(R.id.button_info)
+        buttonOptions = findViewById(R.id.button_options)
+        buttonMenu = findViewById(R.id.button_menu)
+
         screens = listOf(menuScreen, gameScreen, optionsScreen, infoScreen)
+        navigationButtons = listOf(buttonMenu, buttonInfo, buttonOptions)
 
         toggleSounds = findViewById(R.id.toggle_sounds)
         toggleMusic = findViewById(R.id.toggle_music)
@@ -150,18 +172,31 @@ class MainActivity : AppCompatActivity() {
         switchScreen(menuScreen)
         toolbarShow(true)
         setToolbarTitle("Menu")
+        iconMenu.startAnimation(click)
+        updateNavigation(view)
     }
 
     fun onButtonOptions(view: View) {
         switchScreen(optionsScreen)
         toolbarShow(true)
         setToolbarTitle("Options")
+        iconOptions.startAnimation(click)
+        updateNavigation(view)
     }
 
     fun onButtonInfo(view: View) {
         switchScreen(infoScreen)
         toolbarShow(true)
         setToolbarTitle("Info")
+        iconInfo.startAnimation(click)
+        updateNavigation(view)
+    }
+
+    private fun updateNavigation(view: View){
+        for(button in navigationButtons){
+            var color = getColor(if(view.id == button.id) R.color.focused else R.color.clear)
+            colorTransition(button, color, 200)
+        }
     }
 
     private fun switchScreen(show: FrameLayout){
@@ -336,12 +371,12 @@ class MainActivity : AppCompatActivity() {
     //region Utils
 
     @SuppressLint("ObjectAnimatorBinding")
-    fun colorTransition(view: View, targetColor: Int){
+    fun colorTransition(view: View, targetColor: Int, duration: Int = 500){
         val startColor = view.solidColor
         val colors = arrayOf(ColorDrawable(startColor), ColorDrawable(targetColor))
         val trans = TransitionDrawable(colors)
         view.setBackgroundDrawable(trans)
-        trans.startTransition(500)
+        trans.startTransition(duration)
     }
 
     private fun setToolbarTitle(title: String){
@@ -351,7 +386,6 @@ class MainActivity : AppCompatActivity() {
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
         )
-
         textview.layoutParams = layoutparams
         textview.text = title
         textview.setTextColor(Color.WHITE)

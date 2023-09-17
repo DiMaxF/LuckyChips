@@ -400,19 +400,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="About game"
-            android:textColor="#fff"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20dp"
-            android:layout_marginTop="30dp"
-            android:textStyle="bold"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="#fff"
             android:text="@string/info_content"
-            android:paddingTop="70dp"
+            android:paddingTop="30dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"/>
     </FrameLayout>
@@ -423,29 +414,34 @@
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
         android:id="@+id/navigation"
-        android:background="#004E5A">
+        android:background="@color/teal_700">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/navigation">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
-                <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_info"/>
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:onClick="onButtonInfo"
+                    android:id="@+id/button_info"
                     tools:ignore="UsingOnClickInXml"
-                    android:background="@color/clear"/>
+                    android:background="@color/clear"
+                    android:alpha="0.3"/>
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_info"
+                    android:translationZ="50dip"
+                    android:id="@+id/navigation_info"/>
             </FrameLayout>
 
             <FrameLayout
@@ -456,30 +452,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:onClick="onButtonMenu"
+                    android:id="@+id/button_menu"
                     tools:ignore="UsingOnClickInXml"
+                    android:alpha="0.3"
                     android:background="@color/clear"/>
                 <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_play"/>
+                    android:src="@drawable/ic_play"
+                    android:translationZ="50dip"
+                    android:id="@+id/navigation_menu"/>
             </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_options"/>
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:onClick="onButtonOptions"
+                    android:id="@+id/button_options"
                     tools:ignore="UsingOnClickInXml"
+                    android:alpha="0.3"
                     android:background="@color/clear"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_options"
+                    android:translationZ="50dip"
+                    android:id="@+id/navigation_settings"/>
             </FrameLayout>
 
         </LinearLayout>
