@@ -20,6 +20,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import androidx.room.Room.databaseBuilder
+import com.oleg2013.casino.Data.OptionsFields
 import kotlin.random.Random
 
 
@@ -102,6 +105,12 @@ class MainActivity : AppCompatActivity() {
         lateinit var appContext: Context
     }
 
+
+    private val appDatabase: Data.AppDatabase by lazy {
+        databaseBuilder(applicationContext, Data.AppDatabase::class.java, "options.db")
+            .allowMainThreadQueries().build()
+    }
+
     //region Override Functions
 
     @SuppressLint("MissingInflatedId")
@@ -158,8 +167,22 @@ class MainActivity : AppCompatActivity() {
 
         appContext = applicationContext
         switchScreen(menuScreen)
-
+        updateNavigation(buttonMenu)
         setToolbarTitle("Hello!")
+
+        if(!appDatabase.getStatisticDao().isExist(Variables.soundName)){
+            val soundsField = OptionsFields(Variables.soundName, true)
+            appDatabase.getStatisticDao().insertAll(soundsField)
+        }
+        if(!appDatabase.getStatisticDao().isExist(Variables.musicName)){
+            val musicField = OptionsFields(Variables.musicName, true)
+            appDatabase.getStatisticDao().insertAll(musicField)
+        }
+        if(!appDatabase.getStatisticDao().isExist(Variables.vibrationName)){
+            val vibrationField = OptionsFields(Variables.vibrationName, true)
+            appDatabase.getStatisticDao().insertAll(vibrationField)
+        }
+        setTogglesValues()
     }
 
     //endregion
@@ -216,26 +239,43 @@ class MainActivity : AppCompatActivity() {
 
     //region Settings
 
-    private fun onToggleSounds(value: Boolean, view: ToggleButton){
-        Variables.sounds = value
+    private fun setTogglesValues(){
+        val musicValue = appDatabase.getStatisticDao().getFieldByName(Variables.musicName)!!.value
+        val soundsValue = appDatabase.getStatisticDao().getFieldByName(Variables.soundName)!!.value
+        val vibrationValue = appDatabase.getStatisticDao().getFieldByName(Variables.vibrationName)!!.value
+        toggleMusic.isChecked = musicValue
+        toggleSounds.isChecked = soundsValue
+        toggleVibration.isChecked = vibrationValue
+        updateTogglesValue()
+    }
+
+    private fun updateTogglesValue(){
+        Variables.sounds = toggleSounds.isChecked
+        Variables.vibration = toggleVibration.isChecked
+        Variables.music = toggleMusic.isChecked
         playAudio(R.raw.switch_toggle)
+    }
+
+    private fun onToggleSounds(value: Boolean, view: ToggleButton){
+        updateTogglesValue()
         val colorTarget = if(value) getColor(R.color.purple_500) else getColor(R.color.teal_700)
         colorTransition(view, colorTarget)
+        appDatabase.getStatisticDao().updateFieldValue(Variables.soundName, value)
     }
 
     private fun onToggleMusic(value: Boolean, view: ToggleButton){
-        Variables.music = value
+        updateTogglesValue()
         if(!value) offAudio()
-        playAudio(R.raw.switch_toggle)
         val colorTarget = if(value) getColor(R.color.purple_500) else getColor(R.color.teal_700)
         colorTransition(view, colorTarget)
+        appDatabase.getStatisticDao().updateFieldValue(Variables.musicName, value)
     }
 
     private fun onToggleVibration(value: Boolean, view: ToggleButton){
-        Variables.vibration = value
-        playAudio(R.raw.switch_toggle)
+        updateTogglesValue()
         val colorTarget = if(value) getColor(R.color.purple_500) else getColor(R.color.teal_700)
         colorTransition(view, colorTarget)
+        appDatabase.getStatisticDao().updateFieldValue(Variables.vibrationName, value)
     }
 
     fun onButtonRate(view: View){
