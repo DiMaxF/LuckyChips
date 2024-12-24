@@ -1,2 +1,2 @@
 # LuckyChips
-This is real shit you know!??!?!?!?
+Простая заглушка, использовал room для хранения данных
